@@ -1,7 +1,13 @@
 #pragma once
-#include "stdafx.h"
+
+#include "bits/stdc++.h"
+
+//#include <GL/freeglut.h>
 #include "Vec3.h"
 
+using namespace std;
+
+#define EPS 1e-6f
 
 
 
