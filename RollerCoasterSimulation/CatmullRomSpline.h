@@ -1,7 +1,7 @@
 #pragma once
 
 #include "bits/stdc++.h"
-
+#include "Util.h"
 //#include <GL/freeglut.h>
 
 using namespace std;
@@ -43,6 +43,7 @@ public:
 public:
 	void Clear();
 	int GetSegmentCount() const;
+	const vector<Vec3>& GetControlPoints() const;
 	void AddControlPoint(const Vec3& point);
 
 	Vec3 GetPoint(float param) const; //P(t) ==spline 위 위치
@@ -54,4 +55,19 @@ private:
 
 private:
 	vector<Vec3> m_vecControlPoints;
+
+public:
+	void InitializeDefaultTrack();
+	void Rebuild(int sampleCount);
+
+	const CatmullRomSpline& Spline() const;
+	const ArcLengthTable& ArcLengthTable() const;
+
+	ArcLengthSample FrameAtArcLength(float s) const;
+	float TotalLength() const;
+	bool IsReady() const;
+
+private:
+	class ArcLengthTable m_ArcLengthTable;
+	//class CatmullRomSpline m_CatmullRomSpline;
 };

@@ -1,5 +1,6 @@
 #include "CatmullRomSpline.h"
 
+
 void CatmullRomSpline::Clear()
 {
 	m_vecControlPoints.clear();
@@ -8,6 +9,10 @@ void CatmullRomSpline::Clear()
 int CatmullRomSpline::GetSegmentCount() const
 {
     return static_cast<int>(m_vecControlPoints.size());
+}
+const vector<Vec3>& CatmullRomSpline::GetControlPoints() const
+{
+    return m_vecControlPoints;
 }
 
 void CatmullRomSpline::AddControlPoint(const Vec3& point)
@@ -34,6 +39,36 @@ float CatmullRomSpline::WrapParameter(float param) const
 	}
 
 	return param;
+}
+
+void CatmullRomSpline::InitializeDefaultTrack()
+{
+    AddControlPoint(Vec3(0.0f, 16.0f, -38.0f));
+    AddControlPoint(Vec3(22.0f, 12.0f, -30.0f));
+    AddControlPoint(Vec3(40.0f, 8.0f, -8.0f));
+    AddControlPoint(Vec3(30.0f, 22.0f, 18.0f));
+    AddControlPoint(Vec3(5.0f, 30.0f, 32.0f));
+    AddControlPoint(Vec3(-22.0f, 14.0f, 26.0f));
+    AddControlPoint(Vec3(-42.0f, 7.0f, 2.0f));
+    AddControlPoint(Vec3(-30.0f, 18.0f, -25.0f));
+    AddControlPoint(Vec3(-10.0f, 24.0f, -44.0f));
+
+    Rebuild(5000);
+}
+
+void CatmullRomSpline::Rebuild(int sampleCount)
+{
+    m_ArcLengthTable.Sampling(*this, sampleCount);
+}
+
+const CatmullRomSpline& CatmullRomSpline::Spline() const
+{
+    return *this;
+}
+
+const ArcLengthTable& CatmullRomSpline::ArcLengthTable() const
+{
+    return m_ArcLengthTable;
 }
 
 Vec3 CatmullRomSpline::GetPoint(float param) const
@@ -120,4 +155,17 @@ Vec3 CatmullRomSpline::GetTangent(float param) const
 	return NormalizeVec3(derivative);
 }
 
+ArcLengthSample CatmullRomSpline::FrameAtArcLength(float s) const
+{
+    return m_ArcLengthTable.FrameAtArcLength(*this,s);
+}
 
+float CatmullRomSpline::TotalLength() const
+{
+    return 0.0f;
+}
+
+bool CatmullRomSpline::IsReady() const
+{
+    return false;
+}
