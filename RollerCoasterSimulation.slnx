@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="RollerCoasterSimulation/RollerCoasterSimulation.vcxproj" />
+  <Project Path="RollerCoasterSimulation/RollerCoasterSimulation.vcxproj" Id="bc0956e7-ef5a-4048-8341-48774688caac" />
 </Solution>

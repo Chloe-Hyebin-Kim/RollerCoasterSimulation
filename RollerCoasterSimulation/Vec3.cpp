@@ -69,12 +69,12 @@ float LengthVec3(const Vec3& vector)
 
 Vec3 NormalizeVec3(const Vec3& vector)
 {
-    const float currentLength = LengthVec3(vector);
+    const float f32CurLength = LengthVec3(vector);
 
-    if (currentLength < EPS)
+    if (f32CurLength < EPS)
         return Vec3(0.0f, 1.0f, 0.0f); // 0으로 나누기 방지용 기본 업벡터
 
-    return vector / currentLength;
+    return vector / f32CurLength;
 }
 
 float Clampf(float value, float minLimit, float maxLimit)
