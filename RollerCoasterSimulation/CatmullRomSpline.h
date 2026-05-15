@@ -43,6 +43,7 @@ public:
 	//param = segment index + local interpolation
 public:
 	void Clear();
+	int GetSegmentCount() const;
 	void AddControlPoint(const Vec3& point);
 
 	Vec3 GetPoint(float param) const; //P(t) ==spline 위 위치

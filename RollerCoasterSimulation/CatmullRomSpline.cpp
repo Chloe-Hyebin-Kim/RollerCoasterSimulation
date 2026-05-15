@@ -5,6 +5,11 @@ void CatmullRomSpline::Clear()
 	m_vecControlPoints.clear();
 }
 
+int CatmullRomSpline::GetSegmentCount() const
+{
+    return static_cast<int>(m_vecControlPoints.size());
+}
+
 void CatmullRomSpline::AddControlPoint(const Vec3& point)
 {
 	m_vecControlPoints.push_back(point);
