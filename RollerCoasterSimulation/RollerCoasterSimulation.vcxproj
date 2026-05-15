@@ -145,16 +145,12 @@
     <ClCompile Include="CatmullRomSpline.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RollerCoasterSimulation.cpp" />
-    <ClCompile Include="Vec3.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="Util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CatmullRomSpline.h" />
     <ClInclude Include="RollerCoasterSimulation.h" />
-    <ClInclude Include="Vec3.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="Util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

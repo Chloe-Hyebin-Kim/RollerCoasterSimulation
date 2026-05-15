@@ -1,4 +1,4 @@
-#include "Vec3.h"
+#include "Util.h"
 
 Vec3::Vec3() : m_f32X(0.0f), m_f32Y(0.0f), m_f32Z(0.0f)
 {
@@ -93,4 +93,63 @@ Vec3 RotateAroundAxis(const Vec3& targetVector, const Vec3& normalizedAxis, floa
     const float sinAngle = sin(radians);
 
     return targetVector * cosAngle + CrossVec3(normalizedAxis, targetVector) * sinAngle + normalizedAxis * (DotVec3(normalizedAxis, targetVector) * (1.0f - cosAngle));
+}
+
+
+
+void ArcLengthTable::Sampling(const CatmullRomSpline& spline, int i32SampleCount)
+{
+    m_samples.clear();
+    m_f32TotalLength = 0.0f;
+
+    if (i32SampleCount <= 0)
+    {
+        return;
+    }
+
+    int i32SegmentCount = spline.GetSegmentCount();
+
+    if (i32SegmentCount <= 0)
+    {
+        return;
+    }
+
+    Vec3 previousPosition = spline.GetPoint(0.0f);
+
+    for (int i32Index = 0; i32Index <= i32SampleCount; ++i32Index)
+    {
+        float f32Ratio = (float)(i32Index) / (float)(i32SampleCount);
+
+        // 전체 spline parameter 범위:0 ~ (개수-1)
+        float f32U = f32Ratio * (float)(i32SegmentCount);
+        Vec3 position = spline.GetPoint(f32U);
+
+        if (i32Index > 0)
+        {
+            float f32Distance = LengthVec3(position - previousPosition);
+            m_f32TotalLength += f32Distance;
+        }
+
+        ArcLengthSample sample;
+        sample.f32D = m_f32TotalLength;
+        sample.f32Param = f32U;
+        sample.position = position;
+
+        m_samples.push_back(sample);
+
+        previousPosition = position;
+    }
+}
+
+float ArcLengthTable::GetTotalLength() const
+{
+    return 0.0f;
+}
+
+float ArcLengthTable::GetParamFromD(float f32D) const
+{
+    //binary search + linear interpolation
+
+
+    return 0.0f;
 }

@@ -3,9 +3,13 @@
 #include "bits/stdc++.h"
 //#include <GL/freeglut.h>
 
+#include "RollerCoasterSimulation.h"
+#include "CatmullRomSpline.h"
+
 using namespace std;
 
 #define EPS 1e-6f
+
 class Vec3
 {
 public:
@@ -34,3 +38,22 @@ Vec3 NormalizeVec3(const Vec3& v);
 float Clampf(float value, float min_val, float max_val);
 Vec3 LerpVec3(const Vec3& a, const Vec3& b, float t);
 Vec3 RotateAroundAxis(const Vec3& v, const Vec3& axisUnit, float angle);
+
+struct ArcLengthSample
+{
+    float f32D;
+    float f32Param;
+    Vec3 position;
+};
+
+class ArcLengthTable
+{
+public:
+    void Sampling(const CatmullRomSpline& spline, int i32SampleCount);
+    float GetTotalLength() const;
+    float GetParamFromD(float f32D) const;
+
+private:
+    std::vector<ArcLengthSample> m_samples;
+    float m_f32TotalLength = 0.0f;
+};
