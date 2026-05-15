@@ -1,104 +1,96 @@
 #include "Vec3.h"
 
-#include <algorithm>
-#include <cmath>
-
-namespace
-{
-    constexpr float EPS = 1e-6f;
-}
-
-Vec3::Vec3() : x(0.0f), y(0.0f), z(0.0f)
+Vec3::Vec3() : m_f32X(0.0f), m_f32Y(0.0f), m_f32Z(0.0f)
 {
 }
 
-Vec3::Vec3(float x_, float y_, float z_) : x(x_), y(y_), z(z_)
+Vec3::Vec3(float x_, float y_, float z_) : m_f32X(x_), m_f32Y(y_), m_f32Z(z_)
 {
 }
 
 Vec3 Vec3::operator+(const Vec3& v) const
 {
-    return Vec3(x + v.x, y + v.y, z + v.z);
+    return Vec3(m_f32X + v.m_f32X, m_f32Y + v.m_f32Y, m_f32Z + v.m_f32Z);
 }
 
 Vec3 Vec3::operator-(const Vec3& v) const
 {
-    return Vec3(x - v.x, y - v.y, z - v.z);
+    return Vec3(m_f32X - v.m_f32X, m_f32Y - v.m_f32Y, m_f32Z - v.m_f32Z);
 }
 
 Vec3 Vec3::operator-() const
 {
-    return Vec3(-x, -y, -z);
+    return Vec3(-m_f32X, -m_f32Y, -m_f32Z);
 }
 
 Vec3 Vec3::operator*(float s) const
 {
-    return Vec3(x * s, y * s, z * s);
+    return Vec3(m_f32X * s, m_f32Y * s, m_f32Z * s);
 }
 
 Vec3 Vec3::operator/(float s) const
 {
-    return Vec3(x / s, y / s, z / s);
+    return Vec3(m_f32X / s, m_f32Y / s, m_f32Z / s);
 }
 
 Vec3& Vec3::operator+=(const Vec3& v)
 {
-    x += v.x;
-    y += v.y;
-    z += v.z;
+    m_f32X += v.m_f32X;
+    m_f32Y += v.m_f32Y;
+    m_f32Z += v.m_f32Z;
     return *this;
 }
 
-Vec3 operator*(float s, const Vec3& v)
+Vec3 operator*(float scalar, const Vec3& vector)
 {
-    return v * s;
+    return vector * scalar;
 }
 
-float dot(const Vec3& a, const Vec3& b)
+float DotVec3(const Vec3& vectorA, const Vec3& vectorB)
 {
-    return a.x * b.x + a.y * b.y + a.z * b.z;
+    return vectorA.m_f32X * vectorB.m_f32X
+        + vectorA.m_f32Y * vectorB.m_f32Y
+        + vectorA.m_f32Z * vectorB.m_f32Z;
 }
 
-Vec3 cross(const Vec3& a, const Vec3& b)
+Vec3 CrossVec3(const Vec3& vectorA, const Vec3& vectorB)
 {
     return Vec3(
-        a.y * b.z - a.z * b.y,
-        a.z * b.x - a.x * b.z,
-        a.x * b.y - a.y * b.x
+        vectorA.m_f32Y * vectorB.m_f32Z - vectorA.m_f32Z * vectorB.m_f32Y,
+        vectorA.m_f32Z * vectorB.m_f32X - vectorA.m_f32X * vectorB.m_f32Z,
+        vectorA.m_f32X * vectorB.m_f32Y - vectorA.m_f32Y * vectorB.m_f32X
     );
 }
 
-float length(const Vec3& v)
+float LengthVec3(const Vec3& vector)
 {
-    return std::sqrt(dot(v, v));
+    return sqrt(DotVec3(vector, vector));
 }
 
-Vec3 normalize(const Vec3& v)
+Vec3 NormalizeVec3(const Vec3& vector)
 {
-    const float len = length(v);
+    const float currentLength = LengthVec3(vector);
 
-    if (len < EPS)
-        return Vec3(0.0f, 1.0f, 0.0f);
+    if (currentLength < EPS)
+        return Vec3(0.0f, 1.0f, 0.0f); // 0으로 나누기 방지용 기본 업벡터
 
-    return v / len;
+    return vector / currentLength;
 }
 
-float clampf(float v, float lo, float hi)
+float Clampf(float value, float minLimit, float maxLimit)
 {
-    return std::max(lo, std::min(hi, v));
+    return max(minLimit, min(maxLimit, value));
 }
 
-Vec3 lerp(const Vec3& a, const Vec3& b, float t)
+Vec3 LerpVec3(const Vec3& start, const Vec3& end, float alpha)
 {
-    return a * (1.0f - t) + b * t;
+    return start * (1.0f - alpha) + end * alpha;
 }
 
-Vec3 rotateAroundAxis(const Vec3& v, const Vec3& axisUnit, float angle)
+Vec3 RotateAroundAxis(const Vec3& targetVector, const Vec3& normalizedAxis, float radians)
 {
-    const float c = std::cos(angle);
-    const float s = std::sin(angle);
+    const float cosAngle = cos(radians);
+    const float sinAngle = sin(radians);
 
-    return v * c
-        + cross(axisUnit, v) * s
-        + axisUnit * (dot(axisUnit, v) * (1.0f - c));
+    return targetVector * cosAngle + CrossVec3(normalizedAxis, targetVector) * sinAngle + normalizedAxis * (DotVec3(normalizedAxis, targetVector) * (1.0f - cosAngle));
 }

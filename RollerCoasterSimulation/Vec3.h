@@ -1,11 +1,13 @@
 #pragma once
 
+#include "stdafx.h"
+
 class Vec3
 {
 public:
-    float x;
-    float y;
-    float z;
+    float m_f32X;
+    float m_f32Y;
+    float m_f32Z;
 
     Vec3();
     Vec3(float x, float y, float z);
@@ -21,10 +23,10 @@ public:
 
 Vec3 operator*(float s, const Vec3& v);
 
-float dot(const Vec3& a, const Vec3& b);
-Vec3 cross(const Vec3& a, const Vec3& b);
-float length(const Vec3& v);
-Vec3 normalize(const Vec3& v);
-float clampf(float v, float lo, float hi);
-Vec3 lerp(const Vec3& a, const Vec3& b, float t);
-Vec3 rotateAroundAxis(const Vec3& v, const Vec3& axisUnit, float angle);
+float DotVec3(const Vec3& a, const Vec3& b);
+Vec3 CrossVec3(const Vec3& a, const Vec3& b);
+float LengthVec3(const Vec3& v);
+Vec3 NormalizeVec3(const Vec3& v);
+float Clampf(float value, float min_val, float max_val);
+Vec3 LerpVec3(const Vec3& a, const Vec3& b, float t);
+Vec3 RotateAroundAxis(const Vec3& v, const Vec3& axisUnit, float angle);

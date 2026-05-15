@@ -143,11 +143,16 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RollerCoasterSimulation.cpp" />
-    <ClCompile Include="Vec3.cpp" />
+    <ClCompile Include="Vec3.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="RollerCoasterSimulation.h" />
-    <ClInclude Include="Vec3.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Vec3.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
