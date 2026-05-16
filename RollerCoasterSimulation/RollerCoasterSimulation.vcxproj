@@ -146,11 +146,13 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RollerCoasterSimulation.cpp" />
     <ClCompile Include="Util.cpp" />
+    <ClCompile Include="Vec3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CatmullRomSpline.h" />
     <ClInclude Include="RollerCoasterSimulation.h" />
     <ClInclude Include="Util.h" />
+    <ClInclude Include="Vec3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

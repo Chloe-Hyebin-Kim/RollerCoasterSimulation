@@ -1,4 +1,6 @@
 #include "CatmullRomSpline.h"
+#include "Util.h"
+
 
 
 void CatmullRomSpline::Clear()
@@ -66,7 +68,7 @@ const CatmullRomSpline& CatmullRomSpline::Spline() const
     return *this;
 }
 
-const ArcLengthTable& CatmullRomSpline::ArcLengthTable() const
+const class ArcLengthTable& CatmullRomSpline::ArcLengthTable() const
 {
     return m_ArcLengthTable;
 }
@@ -155,17 +157,17 @@ Vec3 CatmullRomSpline::GetTangent(float param) const
 	return NormalizeVec3(derivative);
 }
 
-ArcLengthSample CatmullRomSpline::FrameAtArcLength(float s) const
+class ArcLengthSample CatmullRomSpline::FrameAtArcLength(float s) const
 {
     return m_ArcLengthTable.FrameAtArcLength(*this,s);
 }
 
 float CatmullRomSpline::TotalLength() const
 {
-    return 0.0f;
+    return m_ArcLengthTable.GetTotalLength();
 }
 
 bool CatmullRomSpline::IsReady() const
 {
-    return false;
+    return GetSegmentCount() >= 4 && TotalLength() > EPS;
 }

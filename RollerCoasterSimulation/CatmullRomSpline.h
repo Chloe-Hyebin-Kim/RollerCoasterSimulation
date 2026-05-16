@@ -2,6 +2,7 @@
 
 #include "bits/stdc++.h"
 #include "Util.h"
+#include "Vec3.h"
 //#include <GL/freeglut.h>
 
 using namespace std;
@@ -61,13 +62,13 @@ public:
 	void Rebuild(int sampleCount);
 
 	const CatmullRomSpline& Spline() const;
-	const ArcLengthTable& ArcLengthTable() const;
+	const class ArcLengthTable& ArcLengthTable() const;
 
-	ArcLengthSample FrameAtArcLength(float s) const;
+	class ArcLengthSample FrameAtArcLength(float s) const;
 	float TotalLength() const;
 	bool IsReady() const;
 
 private:
-	class ArcLengthTable m_ArcLengthTable;
+	class ArcLengthTablef m_ArcLengthTable;
 	//class CatmullRomSpline m_CatmullRomSpline;
 };
