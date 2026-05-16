@@ -121,14 +121,17 @@ void RollerCoasterSimulation::DrawSideLines(const vector<ArcSample>& samples)
 
     glBegin(GL_LINE_STRIP);
 
-    for (const ArcSample& sample : samples)
-    {
-        Vec3 leftRail = sample.vecPosition + sample.vecBinormal * RAIL_HALF;
-        Vec3 rightRail = sample.vecPosition - sample.vecBinormal * RAIL_HALF;
+   const int totalSamples = m_ArcLengthTable.GetSamplesArrCount();
+   for (int i = 0; i < totalSamples; i += 35)
+   {
+       const ArcSample& sample = samples[i];
 
-        glVertex3f(leftRail.m_f32X, leftRail.m_f32Y, leftRail.m_f32Z);
-        glVertex3f(rightRail.m_f32X, rightRail.m_f32Y, rightRail.m_f32Z);
-    }
+       const Vec3 left = sample.vecPosition - sample.vecBinormal * RAIL_HALF;
+       const Vec3 right = sample.vecPosition + sample.vecBinormal * RAIL_HALF;
+
+       glVertex3f(left.m_f32X, left.m_f32Y, left.m_f32Z);
+       glVertex3f(right.m_f32X, right.m_f32Y, right.m_f32Z);
+   }
 
     //마지막 점과 첫 점 연결
     {
