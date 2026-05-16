@@ -1,9 +1,5 @@
 #pragma once
-
-#include "bits/stdc++.h"
-using namespace std;
-
-#define EPS 1e-6f
+#include "stdafx.h"
 
 class Vec3
 {
@@ -12,7 +8,7 @@ public:
     float m_f32Y;
     float m_f32Z;
 
-    Vec3() = default;
+    Vec3();
     Vec3(float x, float y, float z);
 
     Vec3 operator+(const Vec3& v) const;

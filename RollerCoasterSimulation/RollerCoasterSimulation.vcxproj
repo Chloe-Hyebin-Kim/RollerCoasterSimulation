@@ -115,6 +115,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>C:\OpenGL\freeglut\include</AdditionalIncludeDirectories>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,15 +143,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ArcSample.cpp" />
+    <ClCompile Include="ArcLengthTable.cpp" />
     <ClCompile Include="CatmullRomSpline.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="RollerCoasterSimulation.cpp" />
+    <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="Vec3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ArcSample.h" />
+    <ClInclude Include="ArcLengthTable.h" />
     <ClInclude Include="CatmullRomSpline.h" />
     <ClInclude Include="RollerCoasterSimulation.h" />
+    <ClInclude Include="stdafx.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="Vec3.h" />
   </ItemGroup>

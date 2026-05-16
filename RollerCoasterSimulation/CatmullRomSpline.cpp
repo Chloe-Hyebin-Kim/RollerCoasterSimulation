@@ -1,5 +1,5 @@
 #include "CatmullRomSpline.h"
-#include "Util.h"
+
 
 
 
@@ -22,60 +22,9 @@ void CatmullRomSpline::AddControlPoint(const Vec3& point)
 	m_vecControlPoints.push_back(point);
 }
 
-float CatmullRomSpline::WrapParameter(float param) const
-{
-	int i32SegmentCount =  m_vecControlPoints.size();
-
-	if (i32SegmentCount <= 0)
-	{
-		return 0.0f;
-	}
-
-	float f32SegmentCount = (float)(i32SegmentCount);
-
-	param = fmod(param, f32SegmentCount);
-
-	if (param < 0.0f)
-	{
-		param += f32SegmentCount;
-	}
-
-	return param;
-}
-
-void CatmullRomSpline::InitializeDefaultTrack()
-{
-    AddControlPoint(Vec3(0.0f, 16.0f, -38.0f));
-    AddControlPoint(Vec3(22.0f, 12.0f, -30.0f));
-    AddControlPoint(Vec3(40.0f, 8.0f, -8.0f));
-    AddControlPoint(Vec3(30.0f, 22.0f, 18.0f));
-    AddControlPoint(Vec3(5.0f, 30.0f, 32.0f));
-    AddControlPoint(Vec3(-22.0f, 14.0f, 26.0f));
-    AddControlPoint(Vec3(-42.0f, 7.0f, 2.0f));
-    AddControlPoint(Vec3(-30.0f, 18.0f, -25.0f));
-    AddControlPoint(Vec3(-10.0f, 24.0f, -44.0f));
-
-    Rebuild(5000);
-}
-
-void CatmullRomSpline::Rebuild(int sampleCount)
-{
-    m_ArcLengthTable.Sampling(*this, sampleCount);
-}
-
-const CatmullRomSpline& CatmullRomSpline::Spline() const
-{
-    return *this;
-}
-
-const class ArcLengthTable& CatmullRomSpline::ArcLengthTable() const
-{
-    return m_ArcLengthTable;
-}
-
 Vec3 CatmullRomSpline::GetPoint(float param) const
 {
-	int i32ControlPointCount = m_vecControlPoints.size();
+    int i32ControlPointCount = m_vecControlPoints.size();
 
     if (i32ControlPointCount < 4)
     {
@@ -114,8 +63,8 @@ Vec3 CatmullRomSpline::GetPoint(float param) const
 
 Vec3 CatmullRomSpline::GetDerivative(float param) const
 {
-	//곡선 방향 알기위해 미분
-	int i32ControlPointCount = m_vecControlPoints.size();
+    //곡선 방향 알기위해 미분
+    int i32ControlPointCount = m_vecControlPoints.size();
 
     if (i32ControlPointCount < 4)
     {
@@ -136,7 +85,7 @@ Vec3 CatmullRomSpline::GetDerivative(float param) const
     const Vec3& p2 = m_vecControlPoints[i32P2Index];
     const Vec3& p3 = m_vecControlPoints[i32P3Index];
 
-    float f32T  = f32LocalT;
+    float f32T = f32LocalT;
     float f32T2 = f32T * f32T;
 
     Vec3 derivative =
@@ -145,7 +94,7 @@ Vec3 CatmullRomSpline::GetDerivative(float param) const
             (-p0 + p2)
             + 2.0f * (2.0f * p0 - 5.0f * p1 + 4.0f * p2 - p3) * f32T
             + 3.0f * (-p0 + 3.0f * p1 - 3.0f * p2 + p3) * f32T2
-        );
+            );
 
     return derivative;
 }
@@ -153,21 +102,27 @@ Vec3 CatmullRomSpline::GetDerivative(float param) const
 
 Vec3 CatmullRomSpline::GetTangent(float param) const
 {
-	Vec3 derivative = GetDerivative(param);
-	return NormalizeVec3(derivative);
+    Vec3 derivative = GetDerivative(param);
+    return NormalizeVec3(derivative);
 }
 
-class ArcLengthSample CatmullRomSpline::FrameAtArcLength(float s) const
+float CatmullRomSpline::WrapParameter(float param) const
 {
-    return m_ArcLengthTable.FrameAtArcLength(*this,s);
-}
+	int i32SegmentCount =  m_vecControlPoints.size();
 
-float CatmullRomSpline::TotalLength() const
-{
-    return m_ArcLengthTable.GetTotalLength();
-}
+	if (i32SegmentCount <= 0)
+	{
+		return 0.0f;
+	}
 
-bool CatmullRomSpline::IsReady() const
-{
-    return GetSegmentCount() >= 4 && TotalLength() > EPS;
+	float f32SegmentCount = (float)(i32SegmentCount);
+
+	param = fmod(param, f32SegmentCount);
+
+	if (param < 0.0f)
+	{
+		param += f32SegmentCount;
+	}
+
+	return param;
 }

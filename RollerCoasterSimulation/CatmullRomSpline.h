@@ -1,17 +1,6 @@
 #pragma once
-
-#include "bits/stdc++.h"
-#include "Util.h"
-#include "Vec3.h"
-//#include <GL/freeglut.h>
-
-using namespace std;
-
-#define EPS 1e-6f
-
-
-
-
+#include "stdafx.h"
+#include "ArcLengthTable.h"
 
 
 // spline으로 track 정의
@@ -57,18 +46,4 @@ private:
 private:
 	vector<Vec3> m_vecControlPoints;
 
-public:
-	void InitializeDefaultTrack();
-	void Rebuild(int sampleCount);
-
-	const CatmullRomSpline& Spline() const;
-	const class ArcLengthTable& ArcLengthTable() const;
-
-	class ArcLengthSample FrameAtArcLength(float s) const;
-	float TotalLength() const;
-	bool IsReady() const;
-
-private:
-	class ArcLengthTablef m_ArcLengthTable;
-	//class CatmullRomSpline m_CatmullRomSpline;
 };
