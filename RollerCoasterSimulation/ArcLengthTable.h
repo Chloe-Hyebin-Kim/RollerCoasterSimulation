@@ -10,7 +10,6 @@ public:
 	ArcLengthTable() = default;
     void Sampling(const class CatmullRomSpline& spline, int i32SampleCount);
     ArcSample FrameAtArcLength(const class CatmullRomSpline& spline, float s) const;
-    //float CalParamFromLength(float f32Len) const;
 
 public:
     const vector<ArcSample>& GetSampleArr() const { return m_arrSamples; };
