@@ -127,7 +127,7 @@ GetPoint : 현재 롤러코스터 위치 계산. <br>
 GetDerivative :현재 위치에서 곡선이 향하는 방향 + 변화량 <br>
 GetTangent :현재 위치에서 앞으로 가는 방향 <br>
 Rebuild : control point로 spline을 만든 뒤, arc length table을 다시 계산 <br>
-Sampling() : s(u) ≈ Σ |P(ui) - P(ui-1)|. <br>
+Sampling() : $s(u) \approx \sum |P(u_i) - P(u_{i-1})|$ <br>
               u를 조금씩 증가-> P(u) 계산->이전 위치와 현재 위치 거리 계산-> 누적 거리 D 저장<br>
 FrameAtArcLength :특정 거리에서 위치와 방향 정보를 반환<br>
 
