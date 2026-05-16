@@ -4,7 +4,7 @@
 
 //#include <GL/freeglut.h>
 
-#include "Vec3.h"
+//#include "Vec3.h"
 //#include "ArcSample.h"
 //#include "ArcLengthTable.h"
 

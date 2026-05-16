@@ -26,6 +26,7 @@ float DotVec3(const Vec3& a, const Vec3& b);
 Vec3 CrossVec3(const Vec3& a, const Vec3& b);
 float LengthVec3(const Vec3& v);
 Vec3 NormalizeVec3(const Vec3& v);
+Vec3 OrthogonalizeVec3(const Vec3& vUp, const Vec3& vTan);
 float Clampf(float value, float min_val, float max_val);
 Vec3 LerpVec3(const Vec3& a, const Vec3& b, float t);
 Vec3 RotateAroundAxis(const Vec3& v, const Vec3& axisUnit, float angle);

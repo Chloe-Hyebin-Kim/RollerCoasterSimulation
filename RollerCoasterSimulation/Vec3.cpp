@@ -78,6 +78,11 @@ Vec3 NormalizeVec3(const Vec3& vector)
     return vector / f32CurLength;
 }
 
+Vec3 OrthogonalizeVec3(const Vec3& vUp, const Vec3& vTan)
+{
+    return NormalizeVec3(vUp - vTan * DotVec3(vUp, vTan));
+}
+
 float Clampf(float value, float minLimit, float maxLimit)
 {
     return max(minLimit, min(maxLimit, value));

@@ -24,7 +24,7 @@ void CatmullRomSpline::AddControlPoint(const Vec3& point)
 
 Vec3 CatmullRomSpline::GetPoint(float param) const
 {
-    int i32ControlPointCount = m_vecControlPoints.size();
+    int i32ControlPointCount = GetSegmentCount();
 
     if (i32ControlPointCount < 4)
     {
@@ -33,7 +33,7 @@ Vec3 CatmullRomSpline::GetPoint(float param) const
 
     param = WrapParameter(param);
 
-    int i32P1Index = static_cast<int>(std::floor(param));
+    int i32P1Index = static_cast<int>(floor(param));
     float f32LocalT = param - static_cast<float>(i32P1Index);
 
     int i32P0Index = (i32P1Index - 1 + i32ControlPointCount) % i32ControlPointCount;
@@ -64,7 +64,7 @@ Vec3 CatmullRomSpline::GetPoint(float param) const
 Vec3 CatmullRomSpline::GetDerivative(float param) const
 {
     //곡선 방향 알기위해 미분
-    int i32ControlPointCount = m_vecControlPoints.size();
+    int i32ControlPointCount = GetSegmentCount();
 
     if (i32ControlPointCount < 4)
     {
@@ -73,7 +73,7 @@ Vec3 CatmullRomSpline::GetDerivative(float param) const
 
     param = WrapParameter(param);
 
-    int i32P1Index = static_cast<int>(std::floor(param));
+    int i32P1Index = static_cast<int>(floor(param));
     float f32LocalT = param - static_cast<float>(i32P1Index);
 
     int i32P0Index = (i32P1Index - 1 + i32ControlPointCount) % i32ControlPointCount;
@@ -108,7 +108,7 @@ Vec3 CatmullRomSpline::GetTangent(float param) const
 
 float CatmullRomSpline::WrapParameter(float param) const
 {
-	int i32SegmentCount =  m_vecControlPoints.size();
+	int i32SegmentCount = GetSegmentCount();
 
 	if (i32SegmentCount <= 0)
 	{
