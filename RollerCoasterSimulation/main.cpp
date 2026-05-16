@@ -3,23 +3,19 @@
 #include "RollerCoasterSimulation.h"
 #include "CatmullRomSpline.h"
 
-RollerCoasterSimulation g_simulation;
+RollerCoasterSimulation g_Simulation;
 
 void Display()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glMatrixMode(GL_MODELVIEW);
+	glMatrixMode(GL_MODELVIEW);//포즈 설정
     glLoadIdentity();
 
-    //P == 현재 롤코 위치
-    //T == 진행 방향
-    //N == 카메라의 정수리방향
-    
     // 일단 track 전체가 보이도록 고정 카메라
-    gluLookAt(30.0, 25.0, 45.0, 10.0, 6.0, -5.0, 0.0, 1.0, 0.0);
-
-    g_simulation.Render();
+    // gluLookAt(30.0, 25.0, 45.0, 10.0, 6.0, -5.0, 0.0, 1.0, 0.0);
+    g_Simulation.ApplyFirstPersonCamera();
+    g_Simulation.Render();
 
     glutSwapBuffers();
 }
@@ -35,17 +31,17 @@ void Reshape(int width, int height)
 
     glViewport(0, 0, width, height);
 
-    glMatrixMode(GL_PROJECTION);
+	glMatrixMode(GL_PROJECTION);//카메라 시야 설정
     glLoadIdentity();
 
     gluPerspective(60.0,aspect,0.1,1000.0);
 
-    glMatrixMode(GL_MODELVIEW);
+	glMatrixMode(GL_MODELVIEW); //카메라포즈 설정
 }
 
 void Timer(int value)
 {
-    g_simulation.Update(0.016f);
+    g_Simulation.Update(0.016f);
 
     glutPostRedisplay();
     glutTimerFunc(16, Timer, 0);
@@ -68,7 +64,7 @@ int main(int argc, char** argv)
 
     InitOpenGL();
 
-    g_simulation.Initialize();
+    g_Simulation.Initialize();
 
     glutDisplayFunc(Display);
     glutReshapeFunc(Reshape);

@@ -4,7 +4,7 @@ void RollerCoasterSimulation::Initialize()
 {
     m_CatmullRomSpline.Clear();
 
-    // 닫힌 Catmull-Rom track용 control points
+	//레일 만들기
     m_CatmullRomSpline.AddControlPoint(Vec3(0.0f, 6.0f, 0.0f));
     m_CatmullRomSpline.AddControlPoint(Vec3(10.0f, 12.0f, 5.0f));
     m_CatmullRomSpline.AddControlPoint(Vec3(20.0f, 4.0f, 0.0f));
@@ -12,7 +12,7 @@ void RollerCoasterSimulation::Initialize()
     m_CatmullRomSpline.AddControlPoint(Vec3(10.0f, 3.0f, -20.0f));
     m_CatmullRomSpline.AddControlPoint(Vec3(-5.0f, 9.0f, -10.0f));
 
-    m_ArcLengthTable.Sampling(m_CatmullRomSpline, 1000);
+	m_ArcLengthTable.Sampling(m_CatmullRomSpline, 1000);//1000개 샘플링해서 길이 테이블 만들기
 
     m_f32CurrentS = 0.0f;
     m_f32InitialVelocity = 8.0f;
@@ -29,18 +29,30 @@ void RollerCoasterSimulation::Update(float dt)
         return;
     }
 
-    ArcSample frame = m_ArcLengthTable.FrameAtArcLength(m_CatmullRomSpline, m_f32CurrentS);
+	ArcSample frame = m_ArcLengthTable.FrameAtArcLength(m_CatmullRomSpline, m_f32CurrentS);//현재 위치에 해당하는 프레임
+
     float curHeight = frame.vecPosition.m_f32Y;
     float velocitySquared =m_f32InitialVelocity * m_f32InitialVelocity + MIN_VELOCITY * GRAVITY * (m_f32StartHeight - curHeight);//높이에 따라 계산
 	velocitySquared = max(MIN_V_POW2, velocitySquared); //최소속도 0 방지
-    m_f32Velocity = sqrt(velocitySquared);
+	m_f32Velocity = sqrt(velocitySquared);//현재속도= sqrt(최초속도제곱 + 2 * g * (시작높이 - 현재높이))
 
     m_f32CurrentS += m_f32Velocity * dt; //이동
+    //if (m_f32CurrentS > m_ArcLengthTable.GetTotalLength())// 전체 길이보다 이동거리가 크면 
+    //{
+    //	m_f32CurrentS = fmod(m_f32CurrentS, m_ArcLengthTable.GetTotalLength());// 전체를 반복해서 타도록
+    //}
 
-    if (m_f32CurrentS > m_ArcLengthTable.GetTotalLength())
+    float  totalLength = m_ArcLengthTable.GetTotalLength();
+    if (m_ArcLengthTable.GetTotalLength() > EPS)
     {
-        m_f32CurrentS = fmod(m_f32CurrentS, m_ArcLengthTable.GetTotalLength());
+        m_f32CurrentS = fmod(m_f32CurrentS, totalLength);
+
+        if (m_f32CurrentS < 0.0f)
+        {
+            m_f32CurrentS += totalLength;
+        }
     }
+  
 }
 
 void RollerCoasterSimulation::Render()
@@ -89,6 +101,14 @@ void RollerCoasterSimulation::ApplyFirstPersonCamera()
     Vec3 tangent = NormalizeVec3(frame.vecTangent);
     Vec3 normal = NormalizeVec3(frame.vecNormal);
 
+    //P == 현재 롤코 위치
+    //T == 진행 방향
+    //N == 카메라의 정수리방향
+
+    //eye = P + N * cameraHeight;
+    //center = eye + T * lookAheadDistance;
+    //up = N;
+
     Vec3 eye = position + normal * CAMERA_HEIGHT;
     Vec3 center = eye + tangent * LOOK_AHEAD_DISTANCE;
     Vec3 up = normal; //카메라 정수리 방향 그대로 씀
@@ -114,7 +134,7 @@ void RollerCoasterSimulation::DrawRails()
 
 void RollerCoasterSimulation::DrawCenterLine(const vector<ArcSample>& samples)
 {
-    glLineWidth(3.0f);
+    glLineWidth(RAIL_THICKNESS);
     glColor3f(1.0f, 1.0f, 0.0f); // 노란색 중심선
 
     glBegin(GL_LINE_STRIP);
@@ -136,7 +156,7 @@ void RollerCoasterSimulation::DrawCenterLine(const vector<ArcSample>& samples)
 
 void RollerCoasterSimulation::DrawSideLines(const vector<ArcSample>& samples)
 {
-    glLineWidth(4.0f);
+    glLineWidth(RAIL_THICKNESS);
     glColor3f(0.8f, 0.8f, 0.8f);
 
     // 왼쪽 rail

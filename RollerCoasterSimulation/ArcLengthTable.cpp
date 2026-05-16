@@ -46,7 +46,7 @@ void ArcLengthTable::Sampling(const CatmullRomSpline& spline, int i32SampleCount
 
         if (i32Index > 0)
         {
-            m_f32TotalLength += LengthVec3(curPosition - prePosition);
+            m_f32TotalLength += LengthVec3(curPosition - prePosition);//갱신
         }
 
         if (i32Index == 0)
@@ -65,11 +65,15 @@ void ArcLengthTable::Sampling(const CatmullRomSpline& spline, int i32SampleCount
         }
         else
         {
+            //if (i32Index > 0)
+            //   m_f32TotalLength += LengthVec3(curPosition - prePosition);//갱신
+
             Vec3 rotationAxis = CrossVec3(preTangent, curTangent);
             float axisLength = LengthVec3(rotationAxis);
 
-            if (axisLength < EPS)
+			if (axisLength < EPS)//방향 안바뀌면
             {
+                //이전꺼 그대로 유지
                 curNormal = preNormal;
                 curBinormal = preBinormal;
             }
@@ -114,13 +118,13 @@ ArcSample ArcLengthTable::FrameAtArcLength(const CatmullRomSpline& spline, float
     if (m_arrSamples.empty() || m_f32TotalLength <= EPS)
         return ArcSample();
 
-    s = fmod(s, m_f32TotalLength);
+	s = fmod(s, m_f32TotalLength);//계속 순환
 
-    if (s < 0.0f)
+	if (s < 0.0f)// 음수면 뒤로 가는 거니까 total length 더해서 양수로 만들어줌!!!!!!!!
         s += m_f32TotalLength;
 
     vector<ArcSample>::const_iterator itr = lower_bound(m_arrSamples.begin(), m_arrSamples.end(), s, 
-        [](const ArcSample& sample, float value)
+		[](const ArcSample& sample, float value)//s보다 처음으로 커지는 샘플 찾기
         { 
             return sample.f32Length < value;
         });
@@ -159,81 +163,80 @@ ArcSample ArcLengthTable::FrameAtArcLength(const CatmullRomSpline& spline, float
 ///alpha = (D - D0) / (D1 - D0)
 ///  u = (1 - alpha)u0 + alpha u1
 /// </summary>
-/// <param name="f32Len"></param>
-/// <returns></returns>
-float ArcLengthTable::CalParamFromLength(float f32Len) const
-{
-    //binary search + linear interpolation
-    if (m_arrSamples.empty())
-    {
-        return 0.0f;
-    }
-
-    if (m_f32TotalLength <= EPS)
-    {
-        return m_arrSamples.front().f32Param;
-    }
-
-    // closed track이면 D가 total length를 넘어도 한 바퀴 돌게 처리
-    f32Len = fmod(f32Len, m_f32TotalLength);
-
-    if (f32Len < 0.0f)
-    {
-        f32Len += m_f32TotalLength;
-    }
-
-    int i32Left = 0;
-    int i32Right = GetSamplesArrCount() - 1;
-
-    while (i32Left <= i32Right)
-    {
-        int i32Mid = (i32Left + i32Right) / 2;
-
-        if (m_arrSamples[i32Mid].f32Length < f32Len)
-        {
-            i32Left = i32Mid + 1;
-        }
-        else
-        {
-            i32Right = i32Mid - 1;
-        }
-    }
-
-    int i32UpperIndex = i32Left;
-
-    if (i32UpperIndex <= 0)
-    {
-        return m_arrSamples.front().f32Param;
-    }
-
-    if (i32UpperIndex >= GetSamplesArrCount())
-    {
-        return m_arrSamples.back().f32Param;
-    }
-
-    const ArcSample& sample1 = m_arrSamples[i32UpperIndex - 1];
-    const ArcSample& sample2 = m_arrSamples[i32UpperIndex];
-
-    float f32Len0 = sample1.f32Length;
-    float f32Len1 = sample2.f32Length;
-
-    float f32Param0 = sample1.f32Param;
-    float f32Param1 = sample2.f32Param;
-
-
-    //alpha = (D - D0) / (D1 - D0)
-   //  u = (1 - alpha)u0 + alpha u1
-    float f32Alpha = 0.0f;
-
-    if ((f32Len1 - f32Len0) > EPS)
-    {
-        f32Alpha = (f32Len - f32Len0) / (f32Len1 - f32Len0);//D0~ D1사이에서 어디쯤?
-    }
-
-    return f32Param0 * (1.0f - f32Alpha) + f32Param1 * f32Alpha;//비율만큼 보간
-
-    return 0.0f;
-}
+/// <param name="f32Len"> 실제 곡선을 따라 이동한 거리 </param>
+/// <returns> GetPoint 에 넣을 parameter </returns>
+//float ArcLengthTable::CalParamFromLength(float f32Len) const
+//{
+//    if (m_arrSamples.empty())
+//    {
+//        return 0.0f;
+//    }
+//
+//    if (m_f32TotalLength <= EPS)//length가 0이면 
+//    {
+//		return m_arrSamples.front().f32Param;//한 점에 모여있으니까!
+//    }
+//
+//    f32Len = fmod(f32Len, m_f32TotalLength);//뺑뻉이
+//
+//    if (f32Len < 0.0f)//뒤로가는 경우
+//    {
+//		f32Len += m_f32TotalLength;
+//    }
+//
+//    int i32Left = 0;
+//    int i32Right = GetSamplesArrCount() - 1;
+//
+//    //이분탐색 (length 기준으로 정렬된 테이블 이분탐색)
+//    while (i32Left <= i32Right)
+//    {
+//        int i32Mid = (i32Left + i32Right) / 2;
+//
+//        //i32Mid가 f32Len보다 작으면 오른쪽으로, 크면 왼쪽으로
+//        if (m_arrSamples[i32Mid].f32Length < f32Len)
+//        {
+//            i32Left = i32Mid + 1;
+//        }
+//        else
+//        {
+//            i32Right = i32Mid - 1;
+//        }
+//    }
+//
+//	int i32UpperIndex = i32Left;//f32Len보다 처음으로 커지는 index
+//
+//	if (i32UpperIndex <= 0)//처음보다 작으면 처음에서 계속
+//    {
+//        return m_arrSamples.front().f32Param;
+//    }
+//
+//	if (i32UpperIndex >= GetSamplesArrCount())
+//    {
+//        return m_arrSamples.back().f32Param;
+//    }
+//
+//    const ArcSample& sample1 = m_arrSamples[i32UpperIndex - 1];
+//    const ArcSample& sample2 = m_arrSamples[i32UpperIndex];
+//
+//    float f32Len0 = sample1.f32Length;
+//    float f32Len1 = sample2.f32Length;
+//
+//    float f32Param0 = sample1.f32Param;
+//    float f32Param1 = sample2.f32Param;
+//
+//
+//    //alpha = (D - D0) / (D1 - D0)
+//   //  u = (1 - alpha)u0 + alpha u1
+//    float f32Alpha = 0.0f;
+//
+//    //두 sample 사이 비율
+//	if ((f32Len1 - f32Len0) > EPS)//D1과 D0가 거의 같으면
+//    {
+//        f32Alpha = ((f32Len - f32Len0) / (f32Len1 - f32Len0));//D0~ D1사이 그 어디쯤?
+//    }
+//
+//    return (float)(f32Param0 * (1.0f - f32Alpha) + f32Param1 * f32Alpha);//비율만큼 보간
+//}
 
 bool ArcLengthTable::IsEmpty() const
 {

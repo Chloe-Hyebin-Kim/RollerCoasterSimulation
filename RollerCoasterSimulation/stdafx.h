@@ -10,6 +10,7 @@ using namespace std;
 #define EPS 1e-6f
 
 #define RAIL_HALF 2.0f
+#define RAIL_THICKNESS 5.0f
 
 #define CAMERA_HEIGHT  0.7f
 #define LOOK_AHEAD_DISTANCE 3.0f
