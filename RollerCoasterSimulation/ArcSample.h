@@ -7,7 +7,7 @@ class ArcSample
 public:
     ArcSample();
 
-    float f32Length;// s == arc length
+    float f32Length;// s == arc length //s += velocity * dt;
     float f32Param; //u
     class Vec3 vecPosition;
     class Vec3 vecTangent; //레일 진행방향
