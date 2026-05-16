@@ -7,12 +7,27 @@ void RollerCoasterSimulation::Initialize()
 	//레일 만들기
     m_CatmullRomSpline.AddControlPoint(Vec3(0.0f, 6.0f, 0.0f));
     m_CatmullRomSpline.AddControlPoint(Vec3(10.0f, 12.0f, 5.0f));
-    m_CatmullRomSpline.AddControlPoint(Vec3(20.0f, 4.0f, 0.0f));
-    m_CatmullRomSpline.AddControlPoint(Vec3(25.0f, 10.0f, -10.0f));
-    m_CatmullRomSpline.AddControlPoint(Vec3(10.0f, 3.0f, -20.0f));
-    m_CatmullRomSpline.AddControlPoint(Vec3(-5.0f, 9.0f, -10.0f));
+    m_CatmullRomSpline.AddControlPoint(Vec3(22.0f, 16.0f, 0.0f));
+    m_CatmullRomSpline.AddControlPoint(Vec3(35.0f, 7.0f, -8.0f));
+    m_CatmullRomSpline.AddControlPoint(Vec3(42.0f, 3.0f, -22.0f));
 
-	m_ArcLengthTable.Sampling(m_CatmullRomSpline, 1000);//1000개 샘플링해서 길이 테이블 만들기
+    m_CatmullRomSpline.AddControlPoint(Vec3(35.0f, 10.0f, -38.0f));
+    m_CatmullRomSpline.AddControlPoint(Vec3(18.0f, 18.0f, -48.0f));
+    m_CatmullRomSpline.AddControlPoint(Vec3(0.0f, 8.0f, -52.0f));
+    m_CatmullRomSpline.AddControlPoint(Vec3(-18.0f, 4.0f, -44.0f));
+    m_CatmullRomSpline.AddControlPoint(Vec3(-32.0f, 13.0f, -30.0f));
+
+    m_CatmullRomSpline.AddControlPoint(Vec3(-42.0f, 20.0f, -10.0f));
+    m_CatmullRomSpline.AddControlPoint(Vec3(-35.0f, 9.0f, 10.0f));
+    m_CatmullRomSpline.AddControlPoint(Vec3(-20.0f, 5.0f, 25.0f));
+    m_CatmullRomSpline.AddControlPoint(Vec3(0.0f, 14.0f, 32.0f));
+    m_CatmullRomSpline.AddControlPoint(Vec3(18.0f, 22.0f, 24.0f));
+
+    m_CatmullRomSpline.AddControlPoint(Vec3(32.0f, 11.0f, 12.0f));
+    m_CatmullRomSpline.AddControlPoint(Vec3(24.0f, 5.0f, -4.0f));
+    m_CatmullRomSpline.AddControlPoint(Vec3(8.0f, 7.0f, -8.0f));
+
+	m_ArcLengthTable.Sampling(m_CatmullRomSpline, 3000);//3000개 샘플링해서 길이 테이블 만들기
 
     m_f32CurrentS = 0.0f;
     m_f32InitialVelocity = 8.0f;
