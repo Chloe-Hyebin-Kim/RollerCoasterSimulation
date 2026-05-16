@@ -12,8 +12,12 @@ void Display()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+    //P == 현재 롤코 위치
+    //T == 진행 방향
+    //N == 카메라의 정수리방향
+    
     // 일단 track 전체가 보이도록 고정 카메라
-    gluLookAt(30.0, 25.0, 45.0,10.0, 6.0, -5.0, 0.0, 1.0, 0.0);
+    gluLookAt(30.0, 25.0, 45.0, 10.0, 6.0, -5.0, 0.0, 1.0, 0.0);
 
     g_simulation.Render();
 

@@ -11,6 +11,8 @@ public:
     void Update(float dt);
     void Render();
 
+    void ApplyFirstPersonCamera();
+
 private:
     void DrawRails();
     void DrawCenterLine(const vector<ArcSample>& samples);

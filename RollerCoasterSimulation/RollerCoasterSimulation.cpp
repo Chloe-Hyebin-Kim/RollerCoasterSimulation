@@ -76,6 +76,26 @@ void RollerCoasterSimulation::Render()
     */
 }
 
+void RollerCoasterSimulation::ApplyFirstPersonCamera()
+{
+    if (m_ArcLengthTable.IsEmpty())
+    {
+        return;
+    }
+
+    ArcSample frame = m_ArcLengthTable.FrameAtArcLength(m_CatmullRomSpline, m_f32CurrentS);
+
+    Vec3 position = frame.vecPosition;
+    Vec3 tangent = NormalizeVec3(frame.vecTangent);
+    Vec3 normal = NormalizeVec3(frame.vecNormal);
+
+    Vec3 eye = position + normal * CAMERA_HEIGHT;
+    Vec3 center = eye + tangent * LOOK_AHEAD_DISTANCE;
+    Vec3 up = normal; //카메라 정수리 방향 그대로 씀
+
+    gluLookAt(eye.m_f32X, eye.m_f32Y,eye.m_f32Z,center.m_f32X,center.m_f32Y,center.m_f32Z,up.m_f32X,up.m_f32Y,up.m_f32Z);
+}
+
 void RollerCoasterSimulation::DrawRails()
 {
 
