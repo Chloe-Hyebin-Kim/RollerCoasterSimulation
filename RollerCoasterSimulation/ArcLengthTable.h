@@ -1,8 +1,7 @@
 #pragma once
 #include "stdafx.h"
-#include "ArcSample.h"
 
-#include "RollerCoasterSimulation.h"
+#include "ArcSample.h"
 #include "CatmullRomSpline.h"
 
 class ArcLengthTable

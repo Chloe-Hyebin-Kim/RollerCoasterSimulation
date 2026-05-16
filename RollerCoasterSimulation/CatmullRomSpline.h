@@ -1,7 +1,5 @@
 #pragma once
 #include "stdafx.h"
-#include "ArcLengthTable.h"
-
 
 // spline으로 track 정의
 // arc length table 또는 numerical integration 준비

@@ -4,11 +4,7 @@
 
 //#include <GL/freeglut.h>
 
-//#include "Vec3.h"
-//#include "ArcSample.h"
-//#include "ArcLengthTable.h"
-
-
+#include "Vec3.h"
 
 using namespace std;
 

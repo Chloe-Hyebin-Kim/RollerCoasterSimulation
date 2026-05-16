@@ -1,5 +1,9 @@
 #pragma once
-#include "stdafx.h"
+
+#include "bits/stdc++.h"
+
+using namespace std;
+#define EPS 1e-6f
 
 class Vec3
 {
